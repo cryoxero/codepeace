@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register - CodePeace</title>
+  <link rel="stylesheet" href="{% static 'css/user-form.css'%}">
+</head>
+<body>
+  <section class="form-section">
+    <div class="container">
+      <h1 class="form-title">Register</h1>
+
+      <form method="POST" action="" class="register-form">
+
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <input type="submit" name="Create User" value="Create Account" class="submit-btn">
+      </form>
+    </div>
+  </section>
+</body>
+</html>
