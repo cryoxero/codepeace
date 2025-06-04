@@ -37,6 +37,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=32, unique=True, null=False, blank=False)
     email = models.CharField(max_length=255, unique=True, null=False, blank=False)
     level = models.IntegerField(null=False, blank=False, default=1)
+    peaced_gardens = models.IntegerField(null=False, blank=False, default=0)
+    last_garden = models.ForeignKey('gardens.Garden', on_delete=models.SET_NULL, default=None, null=True)
 
     is_staff = models.BooleanField(default=False, null=False, blank=False)
     is_active = models.BooleanField(default=True, null=False, blank=False)

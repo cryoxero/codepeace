@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ garden.title }} | CodePeace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+  <link rel="stylesheet" href="{% static 'css/garden.css' %}">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">CodePeace</h1>
+      <nav>
+        <a href="#">Challenges</a>
+        <a href="#">Leaderboard</a>
+        <a href="#">Community</a>
+      </nav>
+      <div class="auth-buttons">
+        <a href="{% url 'users:login' %}" class="login-btn">Login</a>
+        <a href="{% url 'users:register' %}" class="signin-btn">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="garden-wrapper">
+    <!-- LEFT -->
+    <aside class="garden-left">
+      <div class="tabs">
+        <button class="tab active" data-tab="instructions">Instructions</button>
+        <button class="tab" data-tab="output">Output</button>
+      </div>
+      <div id="instructions" class="tab-content active">
+        <h2>{{ garden.title }}</h2>
+        <p>{{ garden.description|safe }}</p>
+      </div>
+      <div id="output" class="tab-content">
+        <p>No output yet.</p>
+      </div>
+    </aside>
+
+    <!-- RIGHT -->
+    <section class="garden-right">
+      <form method="post" class="editor-form">
+        {% csrf_token %}
+        <div class="editor-box">
+          <textarea name="solution" class="code-editor" placeholder="# Write your code...">{{ garden.initial_code }}</textarea>
+        </div>
+        <div class="test-box">
+          <h3>Sample Tests</h3>
+          {% if garden.tests %}
+            <pre class="tests">
+{% for test in garden.tests %}assert solution({{ test.input }}) == {{ test.expected_output }}
+{% endfor %}
+            </pre>
+          {% else %}
+            <p>No tests available.</p>
+          {% endif %}
+        </div>
+        <div class="bottom-bar">
+          <button type="submit" name="action" value="test" class="test-btn">Test</button>
+          <button type="submit" name="action" value="submit" class="attempt-btn">Submit</button>
+          <button type="button" class="secondary">View Solutions</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 CodePeace. All rights reserved.</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Preserve Tab key in textarea
+    document.querySelector('.code-editor').addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 1;
+      }
+    });
+  </script>
+</body>
+</html>
