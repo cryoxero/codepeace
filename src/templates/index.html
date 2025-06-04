@@ -17,8 +17,8 @@
         <a href="#">Community</a>
       </nav>
       <div class="auth-buttons">
-        <button class="login-btn">Login</button>
-        <button class="signin-btn">Sign In</button>
+		  <a href="{% url 'users:login'%}" class="login-btn">Login</a>
+        <a href="{% url 'users:register'%}" class="signin-btn">Sign In</a>
       </div>
     </div>
   </header>

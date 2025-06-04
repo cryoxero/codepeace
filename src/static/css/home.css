@@ -51,6 +51,7 @@ nav a:hover {
 .login-btn {
   background: transparent;
   border: 1px solid #34d399;
+  text-decoration: none;
   color: #34d399;
   padding: 0.5rem 1rem;
   border-radius: 5px;
@@ -66,7 +67,8 @@ nav a:hover {
 .signin-btn {
   background: #34d399;       
   border: 1px solid #34d399; 
-  color: #fff;               
+  color: #fff;          
+  text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
