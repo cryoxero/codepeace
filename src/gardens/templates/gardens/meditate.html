@@ -75,7 +75,7 @@
         </div>
         <div class="bottom-bar">
           <button type="submit" name="action" value="test" class="test-btn">Test</button>
-		  <button type="submit" name="action" value="submit" class="attempt-btn" {{ ready_to_submit }}>Submit</button>
+		  <button type="submit" name="action" value="submit" class="attempt-btn" {% if not ready_to_submit %} disabled {% endif %}>Submit</button>
           <button type="button" class="secondary">View Solutions</button>
         </div>
       </form>

@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     level = models.IntegerField(null=False, blank=False, default=1, validators=[MaxValueValidator(6)])
     peaced_gardens = models.IntegerField(null=False, blank=False, default=0)
     last_garden = models.ForeignKey('gardens.Garden', on_delete=models.SET_NULL, default=None, null=True)
-    xp_amount = models.IntegerField(null=False, blank=False, default=0)
+    xp_amount = models.IntegerField(null=False, blank=False, default=0, validators=[MaxValueValidator(600)])
     is_staff = models.BooleanField(default=False, null=False, blank=False)
     is_active = models.BooleanField(default=True, null=False, blank=False)
     date_joined = models.DateTimeField(default=timezone.now, null=False, blank=False)
@@ -53,3 +53,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def gain_xp(self, garden_level):
+        bonus_xp_gained = (garden_level - self.level) * 25
+        if bonus_xp_gained < 0:
+            bonus_xp_gained = 0
+        xp_gained = bonus_xp_gained + 20
+        self.xp_amount += xp_gained
+        while self.xp_amount > self.level * 100:
+            self.xp_amount -= self.level * 100
+            self.level += 1
+        self.save()
+        
+
+
+
+

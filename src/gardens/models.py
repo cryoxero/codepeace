@@ -17,6 +17,7 @@ class Garden(models.Model):
     test_input = models.FileField(upload_to='garden_test/%Y/%m/%d/%H/%M/%S/', validators=[validate_file_extension], default='', unique=True)
     test_output = models.FileField(upload_to='garden_test/%Y/%m/%d/%H/%M/%S/', validators=[validate_file_extension], default='', unique=True)
     rating = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    level = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1), MaxValueValidator(6)])
     slug = models.SlugField(max_length=256, unique=True, blank=False, default='')
     runner = models.CharField(max_length=512, null=False, blank=False)
     author = models.ForeignKey('users.User', on_delete=models.CASCADE)

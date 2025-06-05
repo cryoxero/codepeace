@@ -19,7 +19,7 @@ def meditate(request, slug):
         'garden': garden,
         'initial_code': garden.initial_code,
         'tests': [],
-        'ready_to_submit': 'disabled'
+        'ready_to_submit': False
     }
 
     input_path = f'{os.getcwd()}/{garden.test_input}'
@@ -70,14 +70,14 @@ def meditate(request, slug):
             )
             output_lines = result.stdout.strip().splitlines()
 
-            ready_to_submit = ''
+            ready_to_submit = True
             for i, line in enumerate(output_lines):
                 if i < len(context['tests']) and line.startswith("Test"):
                     lines = line.split("\\n")
                     res = lines[0].split(":")[-1].strip()
                     if res != 'PASS':
                         context['tests'][i].status = 'red'
-                        ready_to_submit = 'disabled'
+                        ready_to_submit = False
                     context['tests'][i].result.append(res)
                     for l in lines[1:]:
                             context['tests'][i].result.append(l)
@@ -94,6 +94,9 @@ def meditate(request, slug):
 
             except Exception as cleanup_error:
                 print('Clean up failed...', cleanup_error)
+        
+        if request.POST['action'] == 'submit' and context['ready_to_submit'] == True:
+            request.user.gain_xp(garden.level)
 
     return render(request, 'gardens/meditate.html', context)
 
