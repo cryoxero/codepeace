@@ -62,7 +62,7 @@ def meditate(request, slug):
                     "docker", "run", "--rm",
                     "-v", f"{src_path}:/home/runner/src",
                     "-v", f"{testcases_path}:/home/runner/testcases",
-                    "code-test",
+                    f"{garden.runner}-test",
                 ],
                 capture_output=True,
                 text=True,
