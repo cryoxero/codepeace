@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Garden
+from .models import Garden, KyokusenMon
 import os
 import subprocess
 from shutil import rmtree
@@ -96,7 +96,30 @@ def meditate(request, slug):
                 print('Clean up failed...', cleanup_error)
         
         if request.POST['action'] == 'submit' and context['ready_to_submit'] == True:
-            request.user.gain_xp(garden.level)
+            solution = KyokusenMon.objects.filter(garden_ref=garden, meditator_ref=request.user).first()
+            if not solution:
+                request.user.gain_xp(garden.level)
+                keeper_solution = KyokusenMon(meditator_ref=request.user, garden_ref=garden, solution=request.POST['solution'])
+                keeper_solution.save()
+            
+            return redirect(f'/gardens/temple/{slug}')
 
     return render(request, 'gardens/meditate.html', context)
 
+def temple(request, slug):
+    garden = get_object_or_404(Garden, slug=slug)
+    solutions = KyokusenMon.objects.filter(garden_ref=garden)
+    
+    context = {
+        'solutions': solutions,
+    }
+
+    return render(request, 'gardens/temple.html', )
+
+def gardens(request):
+    gardens_list = Garden.objects.all()
+    context = {
+        'gardens': gardens_list
+    }
+
+    return render(request, 'gardens/gardens.html', context)

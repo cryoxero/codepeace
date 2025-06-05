@@ -20,8 +20,13 @@ class Garden(models.Model):
     level = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1), MaxValueValidator(6)])
     slug = models.SlugField(max_length=256, unique=True, blank=False, default='')
     runner = models.CharField(max_length=512, null=False, blank=False)
-    author = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    author_ref = models.ForeignKey('users.User', on_delete=models.CASCADE)
     approved = models.BooleanField(null=False, blank=False, default=False)
 
     def __str__(self):
         return self.title
+
+class KyokusenMon(models.Model):
+    meditator_ref = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    garden_ref = models.ForeignKey('gardens.Garden', on_delete=models.CASCADE)
+    solution = models.TextField(null=False, blank=False, default='')

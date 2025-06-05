@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Gardens | CodePeace</title>
+  <link rel="stylesheet" href="{% static 'css/gardens.css' %}" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 class="logo">CodePeace</h1>
+      <nav>
+        <a href="{% url 'gardens:list' %}">Challenges</a>
+        <a href="#">Leaderboard</a>
+        <a href="#">Community</a>
+        <a href="{% url 'gardens:list' %}">Gardens</a>
+      </nav>
+      <div class="auth-buttons">
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'users:login' %}" class="login-btn">Login</a>
+          <a href="{% url 'users:register' %}" class="signin-btn">Sign In</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <section class="gardens">
+    <div class="container">
+      <h2 class="section-title">Gardens</h2>
+        <div class="garden-list">
+          {% for garden in gardens %}
+            <div class="garden-card">
+				<a href="{% url 'gardens:meditation-room' garden.slug %}"><h3 class="garden-title">{{ garden.title }}</h3></a>
+              <p class="garden-description">{{ garden.description|truncatewords:25 }}</p>
+              <a href="{% url 'gardens:temple' garden.slug %}" class="view-btn">View Solution</a>
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 CodePeace. All rights reserved.</p>
+  </footer>
+</body>
+</html>

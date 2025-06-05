@@ -63,6 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         while self.xp_amount > self.level * 100:
             self.xp_amount -= self.level * 100
             self.level += 1
+        self.peaced_gardens += 1
         self.save()
         
 
