@@ -4,19 +4,21 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 
 def login_page(request):
+    next_url = request.GET.get('next') or request.POST.get('next') or '/'
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
-            return redirect('home')
+            return redirect(next_url)
         else:
             return redirect('users:login')
     else:
         form = AuthenticationForm()
     
-    return render(request, 'users/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form, 'next': next_url})
 
 def register_page(request):
     if request.method == 'POST':

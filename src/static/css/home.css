@@ -22,7 +22,7 @@ header {
   max-width: 1100px;
   margin: auto;
   display: flex;
-  justify-content: space-between; /* logo/nav on left, buttons on right */
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -45,7 +45,7 @@ nav a:hover {
 
 .auth-buttons {
   display: flex;
-  gap: 0.5rem; /* space between buttons */
+  gap: 0.5rem;
 }
 
 .login-btn {
@@ -65,9 +65,9 @@ nav a:hover {
 }
 
 .signin-btn {
-  background: #34d399;       
-  border: 1px solid #34d399; 
-  color: #fff;          
+  background: #34d399;
+  border: 1px solid #34d399;
+  color: #fff;
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
@@ -76,9 +76,26 @@ nav a:hover {
 }
 
 .signin-btn:hover {
-  background: transparent;    
-  color: #34d399;             
-  border: 1px solid #34d399;  
+  background: transparent;
+  color: #34d399;
+  border: 1px solid #34d399;
+}
+
+/* New: Logout button matches login/signin */
+.logout-btn {
+  background: transparent;
+  border: 1px solid #34d399;
+  color: #34d399;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.logout-btn:hover {
+  background: #34d399;
+  color: #000;
 }
 
 .hero {

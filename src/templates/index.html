@@ -17,8 +17,15 @@
         <a href="#">Community</a>
       </nav>
       <div class="auth-buttons">
-		  <a href="{% url 'users:login'%}" class="login-btn">Login</a>
-        <a href="{% url 'users:register'%}" class="signin-btn">Sign In</a>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'users:login'%}" class="login-btn">Login</a>
+          <a href="{% url 'users:register'%}" class="signin-btn">Sign In</a>
+        {% endif %}
       </div>
     </div>
   </header>
@@ -34,6 +41,5 @@
   <footer>
     <p>© 2025 CodePeace. All rights reserved.</p>
   </footer>
-
 </body>
 </html>

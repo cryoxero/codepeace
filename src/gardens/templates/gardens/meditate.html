@@ -20,8 +20,15 @@
         <a href="#">Community</a>
       </nav>
       <div class="auth-buttons">
-        <a href="{% url 'users:login' %}" class="login-btn">Login</a>
-        <a href="{% url 'users:register' %}" class="signin-btn">Sign In</a>
+        {% if user.is_authenticated %}
+			<form method="post" action="{% url 'logout' %}">
+				{% csrf_token %}
+				<button type="submit" class="logout-btn">Logout</button>
+			</form>	
+		{% else %}
+			<a href="{% url 'users:login'%}" class="login-btn">Login</a>
+			<a href="{% url 'users:register'%}" class="signin-btn">Sign In</a>
+		{% endif %}
       </div>
     </div>
   </header>
@@ -39,7 +46,11 @@
         <p>{{ garden.description|safe }}</p>
       </div>
       <div id="output" class="tab-content">
-        <p>No output yet.</p>
+		{% for test in tests %}
+			{% for line in test.result %}
+			<p style="color:{{ test.status }};">{{ line }}</p>
+			{% endfor %}
+		{% endfor %}
       </div>
     </aside>
 
@@ -48,22 +59,23 @@
       <form method="post" class="editor-form">
         {% csrf_token %}
         <div class="editor-box">
-          <textarea name="solution" class="code-editor" placeholder="# Write your code...">{{ garden.initial_code }}</textarea>
+          <textarea name="solution" class="code-editor" placeholder="# Write your code...">{{ initial_code }}</textarea>
         </div>
         <div class="test-box">
           <h3>Sample Tests</h3>
-          {% if garden.tests %}
-            <pre class="tests">
-{% for test in garden.tests %}assert solution({{ test.input }}) == {{ test.expected_output }}
+          {% if tests %}
+            <div class="tests">
+{% for test in tests %}
+		<pre>assert solution({{ test.input }}) == {{ test.output }}</pre>
 {% endfor %}
-            </pre>
+            </div>
           {% else %}
             <p>No tests available.</p>
           {% endif %}
         </div>
         <div class="bottom-bar">
           <button type="submit" name="action" value="test" class="test-btn">Test</button>
-          <button type="submit" name="action" value="submit" class="attempt-btn">Submit</button>
+		  <button type="submit" name="action" value="submit" class="attempt-btn" {{ ready_to_submit }}>Submit</button>
           <button type="button" class="secondary">View Solutions</button>
         </div>
       </form>
@@ -94,8 +106,8 @@
         e.preventDefault();
         const start = this.selectionStart;
         const end = this.selectionEnd;
-        this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
-        this.selectionStart = this.selectionEnd = start + 1;
+        this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 4;
       }
     });
   </script>

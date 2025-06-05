@@ -1,6 +1,7 @@
 from django.contrib.auth.models import UserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CustomUserManager(UserManager):
     def _create_user(self, username, password, **extras):
@@ -36,10 +37,10 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=32, unique=True, null=False, blank=False)
     email = models.CharField(max_length=255, unique=True, null=False, blank=False)
-    level = models.IntegerField(null=False, blank=False, default=1)
+    level = models.IntegerField(null=False, blank=False, default=1, validators=[MaxValueValidator(6)])
     peaced_gardens = models.IntegerField(null=False, blank=False, default=0)
     last_garden = models.ForeignKey('gardens.Garden', on_delete=models.SET_NULL, default=None, null=True)
-
+    xp_amount = models.IntegerField(null=False, blank=False, default=0)
     is_staff = models.BooleanField(default=False, null=False, blank=False)
     is_active = models.BooleanField(default=True, null=False, blank=False)
     date_joined = models.DateTimeField(default=timezone.now, null=False, blank=False)
